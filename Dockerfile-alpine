@@ -3,17 +3,10 @@ FROM alpine:3.10
 
 #环境变量
 ENV TZ "Asia/Shanghai"
-#ENV FASTDFS_MODE=storage
 
-# 添加配置文件
-ADD conf/client.conf /etc/fdfs/
-ADD conf/http.conf /etc/fdfs/
-ADD conf/mime.types /etc/fdfs/
-ADD conf/storage.conf /etc/fdfs/
-ADD conf/tracker.conf /etc/fdfs/
-ADD conf/nginx.conf /etc/fdfs/
-ADD conf/mod_fastdfs.conf /etc/fdfs
-ADD fastdfs.sh /home
+# conf
+COPY conf/* /etc/fdfs/
+COPY fastdfs.sh /home/
 
 RUN set -x \
     && echo "http://mirrors.aliyun.com/alpine/latest-stable/main/" > /etc/apk/repositories \
@@ -41,7 +34,7 @@ RUN set -x \
     && mkdir -p /home/dfs \
     && chmod +x /home/fastdfs.sh \
     && rm -rf /usr/local/src*
-	
+
 VOLUME /home/dfs
 
 EXPOSE 22122 23000 80

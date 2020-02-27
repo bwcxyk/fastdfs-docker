@@ -1,5 +1,9 @@
 # centos 7
 FROM centos:7
+
+#环境变量
+ENV TZ "Asia/Shanghai"
+
 # conf
 COPY conf/* /etc/fdfs/
 COPY fastdfs.sh /home/
