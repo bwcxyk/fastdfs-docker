@@ -44,6 +44,6 @@ RUN set -x \
 	
 VOLUME /home/dfs
 
-EXPOSE 22122 23000 8888 80
+EXPOSE 22122 23000 80
 
 CMD ["/home/fastdfs.sh"]
