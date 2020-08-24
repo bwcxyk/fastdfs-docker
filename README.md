@@ -23,6 +23,12 @@ docker run -d -e FASTDFS_MODE=tracker -p 22122:22122--name tracker yaokun/fastdf
 docker run -d -e FASTDFS_MODE=storage -e TRACKER_SERVER=192.168.1.2:22122 -p 80:80 -p 23000:23000 --name tracker yaokun/fastdfs:V6.06
 ```
 
+
+### 状态检查
+```bash
+fdfs_monitor /etc/fdfs/client.conf
+```
+
 ### 测试上传
 进入docker
 ```bash
