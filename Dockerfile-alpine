@@ -9,8 +9,6 @@ COPY conf/* /etc/fdfs/
 COPY fastdfs.sh /home/
 
 RUN set -x \
-    && echo "http://mirrors.aliyun.com/alpine/latest-stable/main/" > /etc/apk/repositories \
-    && echo "http://mirrors.aliyun.com/alpine/latest-stable/community/" >> /etc/apk/repositories \
     && apk update \
     && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git \
     && mkdir -p /usr/local/src \
