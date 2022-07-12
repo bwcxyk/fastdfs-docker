@@ -30,8 +30,7 @@ RUN yum install git gcc gcc-c++ make automake autoconf libtool pcre pcre-devel z
 
   
 RUN ln -s /usr/local/src/fastdfs/init.d/fdfs_trackerd /etc/init.d/fdfs_trackerd \
-  &&    ln -s /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged \
-  &&    rm -rf /usr/local/src/*
+  &&    ln -s /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged
 
 VOLUME /home/dfs
 

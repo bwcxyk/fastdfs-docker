@@ -33,8 +33,7 @@ RUN set -x \
     && chmod +x /home/fastdfs.sh
 
 RUN ln -s /usr/local/src/fastdfs/init.d/fdfs_trackerd /etc/init.d/fdfs_trackerd \
-    && ln -s /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged \
-    && rm -rf /usr/local/src*
+    && ln -s /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged
 
 VOLUME /home/dfs
 
