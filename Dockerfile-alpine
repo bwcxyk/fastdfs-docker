@@ -30,11 +30,11 @@ RUN set -x \
     && apk del .build-deps \
     && apk add --no-cache pcre-dev bash \
     && mkdir -p /home/dfs \
-    && chmod +x /home/fastdfs.sh \
-    && rm -rf /usr/local/src*
+    && chmod +x /home/fastdfs.sh
 
 RUN ln -s /usr/local/src/fastdfs/init.d/fdfs_trackerd /etc/init.d/fdfs_trackerd \
-  && ln -s /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged
+    && ln -s /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged \
+    && rm -rf /usr/local/src*
 
 VOLUME /home/dfs
 

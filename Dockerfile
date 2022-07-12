@@ -26,11 +26,12 @@ RUN yum install git gcc gcc-c++ make automake autoconf libtool pcre pcre-devel z
   &&    cd /usr/local/src/nginx-1.20.1/ \
   &&    ./configure --add-module=/usr/local/src/fastdfs-nginx-module/src/ \
   &&    make && make install \
-  &&    chmod +x /home/fastdfs.sh \
-  &&    rm -rf /usr/local/src/*
+  &&    chmod +x /home/fastdfs.sh
+
   
 RUN ln -s /usr/local/src/fastdfs/init.d/fdfs_trackerd /etc/init.d/fdfs_trackerd \
-  &&    ln -s /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged
+  &&    ln -s /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged \
+  &&    rm -rf /usr/local/src/*
 
 VOLUME /home/dfs
 
