@@ -33,7 +33,9 @@ jobs:
           push: true
           platforms: linux/amd64
           file: Dockerfile
-          tags: yaokun/fastdfs:latest
+          tags: 
+          - yaokun/fastdfs:V6.08
+          - yaokun/fastdfs:latest
 
   alpine_deploy:
     runs-on: ubuntu-latest
@@ -61,4 +63,6 @@ jobs:
           push: true
           platforms: linux/amd64
           file: Dockerfile-alpine
-          tags: yaokun/fastdfs:latest-alpine
+          tags: 
+          - yaokun/fastdfs:V6.08-alpine
+          - yaokun/fastdfs:latest-alpine
