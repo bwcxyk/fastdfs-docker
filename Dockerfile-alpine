@@ -10,7 +10,7 @@ COPY fastdfs.sh /home/
 
 RUN set -x \
     && apk update \
-    && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git tzdata \
+    && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git \
     && mkdir -p /usr/local/src \
     && cd /usr/local/src \
     && git clone https://github.com/happyfish100/libfastcommon.git --depth 1 \
@@ -28,7 +28,7 @@ RUN set -x \
     && ./configure --add-module=/usr/local/src/fastdfs-nginx-module/src/ \
     && make && make install \
     && apk del .build-deps \
-    && apk add --no-cache pcre-dev bash \
+    && apk add --no-cache pcre-dev bash curl tzdata \
     && mkdir -p /home/dfs \
     && chmod +x /home/fastdfs.sh
 
