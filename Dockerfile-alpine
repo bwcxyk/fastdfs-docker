@@ -10,7 +10,7 @@ COPY fastdfs.sh /home/
 
 RUN set -x \
     && apk update \
-    && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git \
+    && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git tzdata \
     && mkdir -p /usr/local/src \
     && cd /usr/local/src \
     && git clone https://github.com/happyfish100/libfastcommon.git --depth 1 \
