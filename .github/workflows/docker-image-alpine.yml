@@ -2,9 +2,8 @@ name: docker-image-alpine
 
 on:
   push:
-    branches: [ 6.06 ]
-  pull_request:
-    branches: [ 6.06 ]
+    tags:
+    - 'V*'
 
 jobs:
   docker:
@@ -33,4 +32,4 @@ jobs:
           push: true
           platforms: linux/amd64
           file: Dockerfile-alpine
-          tags: yaokun/fastdfs:V6.06-alpine
+          tags: yaokun/fastdfs:${{ steps.get_version.outputs.VERSION }}-alpine
