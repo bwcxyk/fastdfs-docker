@@ -1,5 +1,5 @@
 #基础镜像
-FROM alpine:3.12
+FROM alpine:3.17.2
 
 #环境变量
 ENV TZ "Asia/Shanghai"
@@ -8,37 +8,39 @@ ENV TZ "Asia/Shanghai"
 COPY conf/* /etc/fdfs/
 COPY fastdfs.sh /home/
 
+# run
+# install packages
 RUN set -x \
     && apk update \
-    && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git \
-    && mkdir -p /usr/local/src \
+    && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git
+# git clone libfastcommon / libserverframe / fastdfs / fastdfs-nginx-module
+RUN mkdir -p /usr/local/src \
     && cd /usr/local/src \
     && git clone https://github.com/happyfish100/libfastcommon.git --depth 1 \
     && git clone https://github.com/happyfish100/libserverframe.git --depth 1 \
     && git clone -b V6.09 https://github.com/happyfish100/fastdfs.git --depth 1    \
     && git clone https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1  \
     && wget http://nginx.org/download/nginx-1.22.1.tar.gz \
-    #编译libfastcommon
+    && pwd && ls
+# build libfastcommon / libserverframe / fastdfs
+RUN mkdir /home/dfs \
+    && cd /usr/local/src  \
     && cd /usr/local/src/libfastcommon \
     && ./make.sh && ./make.sh install \
-    #编译libserverframe
     && cd /usr/local/src/libserverframe \
     && ./make.sh && ./make.sh install \
-    #编译fastdfs
     && cd /usr/local/src/fastdfs/ \
     && ./make.sh && ./make.sh install \
-    #编译nginx
     && tar -zxvf nginx-1.22.1.tar.gz \
     && cd /usr/local/src/nginx-1.22.1/ \
     && ./configure --add-module=/usr/local/src/fastdfs-nginx-module/src/ \
     && make && make install \
     && apk del .build-deps \
     && apk add --no-cache pcre-dev bash curl tzdata \
-    && mkdir -p /home/dfs \
     && chmod +x /home/fastdfs.sh
 
-RUN cp /usr/local/src/fastdfs/init.d/fdfs_trackerd /etc/init.d/fdfs_trackerd \
-    && cp /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged \
+RUN ln -s /usr/local/src/fastdfs/init.d/fdfs_trackerd /etc/init.d/fdfs_trackerd \
+    && ln -s /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged \
     && rm -rf /usr/local/src*
 
 VOLUME /home/dfs
