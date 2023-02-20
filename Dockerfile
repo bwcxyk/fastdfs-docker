@@ -10,23 +10,28 @@ COPY fastdfs.sh /home/
 
 # run
 RUN yum install git gcc gcc-c++ make automake autoconf libtool pcre pcre-devel zlib zlib-devel openssl-devel wget vim -y \
-  &&    cd /usr/local/src \
-  &&    git clone https://github.com/happyfish100/libfastcommon.git --depth 1 \
-  &&    git clone -b V6.08 https://github.com/happyfish100/fastdfs.git --depth 1 \
-  &&    git clone https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1 \
-  &&    wget http://nginx.org/download/nginx-1.20.1.tar.gz \
-  &&    tar -zxvf nginx-1.20.1.tar.gz \
-  &&    mkdir /home/dfs \
-  &&    cd /usr/local/src/libfastcommon \
-  &&    ./make.sh \
-  &&    ./make.sh install \
-  &&    cd /usr/local/src/fastdfs/ \
-  &&    ./make.sh \
-  &&    ./make.sh install \
-  &&    cd /usr/local/src/nginx-1.20.1/ \
-  &&    ./configure --add-module=/usr/local/src/fastdfs-nginx-module/src/ \
-  &&    make && make install \
-  &&    chmod +x /home/fastdfs.sh
+    && cd /usr/local/src \
+    && git clone https://github.com/happyfish100/libfastcommon.git --depth 1 \
+    && git clone https://github.com/happyfish100/libserverframe.git --depth 1 \
+    && git clone -b V6.09 https://github.com/happyfish100/fastdfs.git --depth 1 \
+    && git clone https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1 \
+    && mkdir /home/dfs \
+    #编译libfastcommon
+    && cd /usr/local/src/libfastcommon \
+    && ./make.sh && ./make.sh install \
+    #编译libserverframe
+    && cd /usr/local/src/libserverframe \
+    && ./make.sh && ./make.sh install \
+    #编译fastdfs
+    && cd /usr/local/src/fastdfs/ \
+    && ./make.sh && ./make.sh install \
+    #编译nginx
+    && wget http://nginx.org/download/nginx-1.22.1.tar.gz \
+    && tar -zxvf nginx-1.22.1.tar.gz \
+    && cd /usr/local/src/nginx-1.22.1/ \
+    && ./configure --add-module=/usr/local/src/fastdfs-nginx-module/src/ \
+    && make && make install \
+    && chmod +x /home/fastdfs.sh
 
   
 RUN cp /usr/local/src/fastdfs/init.d/fdfs_trackerd /etc/init.d/fdfs_trackerd \
