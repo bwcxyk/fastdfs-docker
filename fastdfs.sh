@@ -1,17 +1,18 @@
 #!/bin/bash
 
-new_val=$TRACKER_SERVER
-old="tracker:22122"
+#
+cp /home/http.conf /etc/fdfs/http.conf
+cp /home/mime.types /etc/fdfs/mime.types
+cp /home/nginx.conf /usr/local/nginx/conf/nginx.conf
+cp /home/tracker.conf /etc/fdfs/tracker.conf
+#
+cp /home/storage.conf /etc/fdfs/storage.conf
+cp /home/client.conf /etc/fdfs/client.conf
+cp /home/mod_fastdfs.conf /etc/fdfs/mod_fastdfs.conf
 
-sed -i "s/$old/$new_val/g" /etc/fdfs/client.conf
-sed -i "s/$old/$new_val/g" /etc/fdfs/storage.conf
-sed -i "s/$old/$new_val/g" /etc/fdfs/mod_fastdfs.conf
-cat /etc/fdfs/client.conf > /etc/fdfs/client.txt
-cat /etc/fdfs/storage.conf >  /etc/fdfs/storage.txt
-cat /etc/fdfs/mod_fastdfs.conf > /etc/fdfs/mod_fastdfs.txt
-
-mv /usr/local/nginx/conf/nginx.conf /usr/local/nginx/conf/nginx.conf.t
-cp /etc/fdfs/nginx.conf /usr/local/nginx/conf
+sed -i -e "s|###TRACKER###|$TRACKER_SERVER|g" /etc/fdfs/client.conf
+sed -i -e "s|###TRACKER###|$TRACKER_SERVER|g" /etc/fdfs/storage.conf
+sed -i -e "s|###TRACKER###|$TRACKER_SERVER|g" /etc/fdfs/mod_fastdfs.conf
 
 echo ${FASTDFS_MODE}
 
