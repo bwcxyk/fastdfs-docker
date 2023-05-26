@@ -5,7 +5,7 @@ FROM centos:7
 ENV TZ "Asia/Shanghai"
 
 # conf
-COPY conf/* /etc/fdfs/
+COPY conf/* /opt/
 COPY fastdfs.sh /home/
 
 # run
