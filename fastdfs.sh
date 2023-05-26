@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#
+# 复制配置文件
 cp /opt/http.conf /etc/fdfs/http.conf
 cp /opt/mime.types /etc/fdfs/mime.types
 cp /opt/nginx.conf /usr/local/nginx/conf/nginx.conf
 cp /opt/tracker.conf /etc/fdfs/tracker.conf
-#
+# 需要替换tracker address
 cp /opt/storage.conf /etc/fdfs/storage.conf
 cp /opt/client.conf /etc/fdfs/client.conf
 cp /opt/mod_fastdfs.conf /etc/fdfs/mod_fastdfs.conf
