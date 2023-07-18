@@ -18,6 +18,7 @@ docker run -d -e FASTDFS_MODE=tracker -p 22122:22122--name tracker yaokun/fastdf
 启动storage
 
 需要注意的是storage模式需要指定tracker宿主机的ip端口，用参数`TRACKER_SERVER`来指定
+> 兼容docker及k8s中服务名称的写法，比如`fdfs-tracker:22122`
 
 ```bash
 docker run -d -e FASTDFS_MODE=storage -e TRACKER_SERVER=192.168.1.2:22122 -p 80:80 -p 23000:23000 --name tracker yaokun/fastdfs:V6.09
