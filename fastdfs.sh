@@ -1,5 +1,8 @@
 #!/bin/bash
 
+RESERVED_STORAGE_SPACE_DEFAULT="10%"
+RESERVED_STORAGE_SPACE="${RESERVED_STORAGE_SPACE:-$RESERVED_STORAGE_SPACE_DEFAULT}"
+
 # 复制配置文件
 cp /opt/http.conf /etc/fdfs/http.conf
 cp /opt/mime.types /etc/fdfs/mime.types
