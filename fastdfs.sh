@@ -23,15 +23,11 @@ echo ${FASTDFS_MODE}
 if [ "${FASTDFS_MODE}" = "tracker" ] ;
     then
     echo "start trackerd"
-    /etc/init.d/fdfs_trackerd start
-    tail -f /dev/null
+    exec /etc/init.d/fdfs_trackerd start
     elif [ "${FASTDFS_MODE}" = "storage" ];
     then
-    echo "start storage"
-    /etc/init.d/fdfs_storaged start
-    echo "start nginx"
-    /usr/local/nginx/sbin/nginx 
-    tail -f /dev/null
+    echo "start storage and nginx"
+    exec /bin/bash -c "/etc/init.d/fdfs_storaged start && /usr/local/nginx/sbin/nginx" 
     else
     echo 'You need to choose the "FASTDFS_MODE"'
 fi
