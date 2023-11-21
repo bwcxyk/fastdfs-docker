@@ -31,7 +31,7 @@ RUN mkdir /home/dfs \
     && cd /usr/local/src/ \
     && tar -zxvf nginx-1.22.1.tar.gz \
     && cd /usr/local/src/nginx-1.22.1/ \
-    && ./configure --add-module=/usr/local/src/fastdfs-nginx-module/src/ \
+    && ./configure --add-module=/usr/local/src/fastdfs-nginx-module/src \
     && make && make install \
     && chmod +x /home/fastdfs.sh
   
