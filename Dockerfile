@@ -15,7 +15,7 @@ RUN yum install git gcc gcc-c++ make automake autoconf libtool pcre pcre-devel z
 RUN set -x \
     && cd /usr/local/src \
     && git clone https://github.com/happyfish100/libfastcommon.git --depth 1 \
-    && git clone https://github.com/happyfish100/libserverframe.git --depth 1 \
+    && git clone -b V1.1.28 https://github.com/happyfish100/libserverframe.git --depth 1 \
     && git clone -b V6.09 https://github.com/happyfish100/fastdfs.git --depth 1 \
     && git clone https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1 \
     && wget http://nginx.org/download/nginx-1.22.1.tar.gz
