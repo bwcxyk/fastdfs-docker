@@ -12,12 +12,16 @@ Dockerfile 所需要的一些配置文件
 启动tracker
 
 ```bash
-docker run -d -e FASTDFS_MODE=tracker -p 22122:22122--name tracker yaokun/fastdfs:V6.09
+docker run -d -e FASTDFS_MODE=tracker -e RESERVED_STORAGE_SPACE=10G -p 22122:22122--name tracker yaokun/fastdfs:V6.09
 ```
+
+> `RESERVED_STORAGE_SPACE`可以是具体的GB、MB、KB、B
+>
+> 也可以是百分百，如：10%
 
 启动storage
 
-需要注意的是storage模式需要指定tracker宿主机的ip端口，用参数`TRACKER_SERVER`来指定
+需要注意的是storage模式需要指定tracker服务地址，用参数`TRACKER_SERVER`来指定
 > 兼容docker及k8s中服务名称的写法，比如`fdfs-tracker:22122`
 
 ```bash
