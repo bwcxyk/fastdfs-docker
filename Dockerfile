@@ -32,7 +32,7 @@ RUN set -x \
     && git clone -b V1.1.28 https://github.com/happyfish100/libserverframe.git --depth 1 \
     && git clone -b V6.09 https://github.com/happyfish100/fastdfs.git --depth 1 \
     && git clone -b V1.23 https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1 \
-    && wget http://nginx.org/download/nginx-1.22.1.tar.gz
+    && wget https://nginx.org/download/nginx-1.26.2.tar.gz
 # build libfastcommon / libserverframe / fastdfs
 RUN set -x \
     && mkdir /home/dfs \
