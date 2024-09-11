@@ -23,13 +23,15 @@ if [ "${FASTDFS_MODE}" = "tracker" ] ;
     then
     echo "start trackerd"
     /etc/init.d/fdfs_trackerd start
+    tail -f /home/dfs/logs/trackerd.log
     elif [ "${FASTDFS_MODE}" = "storage" ];
     then
     echo "start storage and nginx"
     /etc/init.d/fdfs_storaged start && /usr/local/nginx/sbin/nginx
+    tail -f /home/dfs/logs/storaged.log
     else
     echo 'You need to choose the "FASTDFS_MODE"'
 fi
 
 # Keep the container running
-tail -f /dev/null
+# tail -f /dev/null
