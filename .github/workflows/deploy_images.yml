@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  centos_deploy:
+  debian_deploy:
     runs-on: ubuntu-latest
     steps:
       -
