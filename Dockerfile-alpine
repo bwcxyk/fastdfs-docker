@@ -1,7 +1,8 @@
 #基础镜像
 FROM alpine:3.20
 
-#环境变量
+ARG NGINX_VERSION=1.26.2
+
 ENV TZ "Asia/Shanghai"
 
 # conf
@@ -21,7 +22,7 @@ RUN set -x \
     && git clone -b V1.1.28 https://github.com/happyfish100/libserverframe.git --depth 1 \
     && git clone -b V6.09 https://github.com/happyfish100/fastdfs.git --depth 1 \
     && git clone -b V1.23 https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1 \
-    && wget https://nginx.org/download/nginx-1.26.2.tar.gz
+    && wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
 # build libfastcommon / libserverframe / fastdfs
 RUN set -x \
     && mkdir /home/dfs \
@@ -33,8 +34,8 @@ RUN set -x \
     && cd /usr/local/src/fastdfs \
     && ./make.sh && ./make.sh install \
     && cd /usr/local/src \
-    && tar -zxvf nginx-1.22.1.tar.gz \
-    && cd /usr/local/src/nginx-1.22.1 \
+    && tar -zxvf nginx-$NGINX_VERSION.tar.gz \
+    && cd /usr/local/src/nginx-$NGINX_VERSION \
     && ./configure --add-module=/usr/local/src/fastdfs-nginx-module/src \
     && make && make install \
     && apk del .build-deps \
