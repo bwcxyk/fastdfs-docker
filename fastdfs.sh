@@ -22,14 +22,24 @@ echo "${FASTDFS_MODE}"
 if [ "${FASTDFS_MODE}" = "tracker" ] ;
     then
     echo "start trackerd"
+    # Start the tracker
     /etc/init.d/fdfs_trackerd start
+    # Wait for the log file to be generated
+    while [ ! -f /home/dfs/logs/trackerd.log ]; do
+        sleep 1
+    done
     tail -f /home/dfs/logs/trackerd.log
-    elif [ "${FASTDFS_MODE}" = "storage" ];
+elif [ "${FASTDFS_MODE}" = "storage" ];
     then
     echo "start storage and nginx"
+    # Start the storage and nginx
     /etc/init.d/fdfs_storaged start && /usr/local/nginx/sbin/nginx
+    # Wait for the log file to be generated
+    while [ ! -f /home/dfs/logs/storaged.log ]; do
+        sleep 1
+    done
     tail -f /home/dfs/logs/storaged.log
-    else
+else
     echo 'You need to choose the "FASTDFS_MODE"'
 fi
 
