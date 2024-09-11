@@ -1,5 +1,5 @@
-# debian
-FROM debian:bullseye-slim
+# centos 7
+FROM centos:7
 
 #环境变量
 ENV TZ "Asia/Shanghai"
@@ -10,21 +10,7 @@ COPY fastdfs.sh /home/
 
 # run
 # install packages
-RUN set -x \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        ca-certificates \
-        git \
-        build-essential \
-        libpcre3 \
-        libpcre3-dev \
-        zlib1g \
-        zlib1g-dev \
-        libssl-dev \
-        wget \
-        vim \
-    && rm -rf /var/lib/apt/lists/*
-
+RUN yum -y install git gcc gcc-c++ make automake autoconf libtool pcre pcre-devel zlib zlib-devel openssl-devel wget vim
 # git clone libfastcommon / libserverframe / fastdfs / fastdfs-nginx-module
 RUN set -x \
     && cd /usr/local/src \
