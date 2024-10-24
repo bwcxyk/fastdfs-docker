@@ -34,7 +34,7 @@ jobs:
           platforms: linux/amd64
           file: Dockerfile
           tags: |
-            yaokun/fastdfs:V6.09
+            yaokun/fastdfs:V6.11
             yaokun/fastdfs:latest
 
   alpine_deploy:
@@ -64,5 +64,5 @@ jobs:
           platforms: linux/amd64
           file: Dockerfile-alpine
           tags: |
-            yaokun/fastdfs:V6.09-alpine
+            yaokun/fastdfs:V6.11-alpine
             yaokun/fastdfs:latest-alpine
