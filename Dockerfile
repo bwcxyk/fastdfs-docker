@@ -47,4 +47,4 @@ RUN set -x \
 VOLUME /opt/fastdfs
 
 EXPOSE 22122 23000 80
-ENTRYPOINT ["fastdfs.sh"]
+CMD ["fastdfs.sh"]
