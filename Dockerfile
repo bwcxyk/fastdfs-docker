@@ -1,17 +1,18 @@
 # debian
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 ARG NGINX_VERSION=1.26.2
 
 ENV TZ "Asia/Shanghai"
 
 # conf
-COPY conf/* /opt/
-COPY fastdfs.sh /home/
+COPY conf/* /home/
+COPY fastdfs.sh /usr/local/bin/
 
 # run
 # install packages
 RUN set -x \
+    # && sed -i 's|deb.debian.org|mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list.d/debian.sources \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -28,34 +29,35 @@ RUN set -x \
 
 # git clone libfastcommon / libserverframe / fastdfs / fastdfs-nginx-module
 RUN set -x \
-    && cd /usr/local/src \
-    && git clone -b V1.0.68 https://github.com/happyfish100/libfastcommon.git --depth 1 \
-    && git clone -b V1.1.28 https://github.com/happyfish100/libserverframe.git --depth 1 \
-    && git clone -b V6.09 https://github.com/happyfish100/fastdfs.git --depth 1 \
-    && git clone -b V1.23 https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1 \
+    && mkdir /opt/tmp \
+    && cd /opt/tmp \
+    && git clone -b V1.0.71 https://github.com/happyfish100/libfastcommon.git --depth 1 \
+    && git clone -b V1.2.1 https://github.com/happyfish100/libserverframe.git --depth 1 \
+    && git clone -b V6.11.0 https://github.com/happyfish100/fastdfs.git --depth 1 \
+    && git clone -b V1.24 https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1 \
     && wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
 # build libfastcommon / libserverframe / fastdfs
 RUN set -x \
-    && mkdir /home/dfs \
-    && cd /usr/local/src  \
-    && cd /usr/local/src/libfastcommon \
+    && mkdir /opt/fastdfs \
+    && cd /opt/tmp  \
+    && cd /opt/tmp/libfastcommon \
     && ./make.sh && ./make.sh install \
-    && cd /usr/local/src/libserverframe \
+    && cd /opt/tmp/libserverframe \
     && ./make.sh && ./make.sh install \
-    && cd /usr/local/src/fastdfs \
+    && cd /opt/tmp/fastdfs \
     && ./make.sh && ./make.sh install \
-    && cd /usr/local/src \
+    && cd /opt/tmp \
     && tar -zxvf nginx-$NGINX_VERSION.tar.gz \
-    && cd /usr/local/src/nginx-$NGINX_VERSION \
-    && ./configure --add-module=/usr/local/src/fastdfs-nginx-module/src \
+    && cd /opt/tmp/nginx-$NGINX_VERSION \
+    && ./configure --add-module=/opt/tmp/fastdfs-nginx-module/src \
     && make && make install \
-    && chmod +x /home/fastdfs.sh
+    && chmod +x /usr/local/bin/fastdfs.sh
   
-RUN cp /usr/local/src/fastdfs/init.d/fdfs_trackerd /etc/init.d/fdfs_trackerd \
-    && cp /usr/local/src/fastdfs/init.d/fdfs_storaged /etc/init.d/fdfs_storaged \
-    && rm -rf /usr/local/src*
+RUN cp /opt/tmp/fastdfs/init.d/fdfs_trackerd /usr/local/bin/fdfs_trackerd \
+    && cp /opt/tmp/fastdfs/init.d/fdfs_storaged /usr/local/bin/fdfs_storaged \
+    && rm -rf /opt/tmp
 
-VOLUME /home/dfs
+VOLUME /opt/fastdfs
 
 EXPOSE 22122 23000 80
-ENTRYPOINT ["/home/fastdfs.sh"]
+ENTRYPOINT ["fastdfs.sh"]
