@@ -17,7 +17,6 @@ RUN set -x \
     && apt-get install -y --no-install-recommends ca-certificates build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev wget git \
     # build fastdfs
     && mkdir /opt/tmp /opt/fastdfs \
-    && ls /opt \
     && cd /opt/tmp \
     # git clone libfastcommon, libserverframe, fastdfs, fastdfs-nginx-module
     && git clone -b V1.0.68 https://github.com/happyfish100/libfastcommon.git --depth 1 \
