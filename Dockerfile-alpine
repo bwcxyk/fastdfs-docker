@@ -1,4 +1,4 @@
-#基础镜像
+# base
 FROM alpine:3.20
 
 ARG NGINX_VERSION=1.26.2
@@ -11,43 +11,35 @@ COPY fastdfs.sh /usr/local/bin/
 
 # run
 # install packages
-RUN set -x \
+RUN set -eux \
     # && sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories \
     && apk update \
-    && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git
-
-# git clone libfastcommon / libserverframe / fastdfs / fastdfs-nginx-module
-RUN set -x \
-    && mkdir -p /opt/tmp \
+    && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git \
+    # git clone libfastcommon / libserverframe / fastdfs / fastdfs-nginx-module
+    && mkdir /opt/tmp /opt/fastdfs \
     && cd /opt/tmp \
     && git clone -b V1.0.71 https://github.com/happyfish100/libfastcommon.git --depth 1 \
     && git clone -b V1.2.1 https://github.com/happyfish100/libserverframe.git --depth 1 \
     && git clone -b V6.11.0 https://github.com/happyfish100/fastdfs.git --depth 1 \
     && git clone -b V1.24 https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1 \
-    && wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
-
-# build libfastcommon / libserverframe / fastdfs
-RUN set -x \
-    && mkdir /opt/fastdfs \
-    && cd /opt/tmp  \
-    && cd /opt/tmp/libfastcommon \
-    && ./make.sh && ./make.sh install \
-    && cd /opt/tmp/libserverframe \
-    && ./make.sh && ./make.sh install \
-    && cd /opt/tmp/fastdfs \
-    && ./make.sh && ./make.sh install \
-    && cd /opt/tmp \
+    && wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
     && tar -zxvf nginx-$NGINX_VERSION.tar.gz \
+    # build libfastcommon, libserverframe, fastdfs
+    && cd /opt/tmp/libfastcommon && ./make.sh && ./make.sh install \
+    && cd /opt/tmp/libserverframe && ./make.sh && ./make.sh install \
+    && cd /opt/tmp/fastdfs && ./make.sh && ./make.sh install \
+    # build nginx and add fastdfs-nginx-module
     && cd /opt/tmp/nginx-$NGINX_VERSION \
     && ./configure --add-module=/opt/tmp/fastdfs-nginx-module/src \
     && make && make install \
+    # cp script
+    && cp /opt/tmp/fastdfs/init.d/fdfs_trackerd /usr/local/bin/fdfs_trackerd \
+    && cp /opt/tmp/fastdfs/init.d/fdfs_storaged /usr/local/bin/fdfs_storaged \
+    && chmod +x /usr/local/bin/fastdfs.sh /usr/local/bin/fdfs_trackerd /usr/local/bin/fdfs_storaged \
+    # cleanup
     && apk del .build-deps \
     && apk add --no-cache pcre-dev bash curl tzdata \
-    && chmod +x /usr/local/bin/fastdfs.sh
-
-RUN cp /opt/tmp/fastdfs/init.d/fdfs_trackerd /usr/local/bin/fdfs_trackerd \
-    && cp /opt/tmp/fastdfs/init.d/fdfs_storaged /usr/local/bin/fdfs_storaged \
-    && rm -rf /opt/tmp*
+    && rm -rf /opt/tmp
 
 VOLUME /opt/fastdfs
 
