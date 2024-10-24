@@ -25,20 +25,20 @@ if [ "${FASTDFS_MODE}" = "tracker" ] ;
     # Start the tracker
     /usr/local/bin/fdfs_trackerd start
     # Wait for the log file to be generated
-    while [ ! -f /home/dfs/logs/trackerd.log ]; do
+    while [ ! -f /opt/fastdfs/logs/trackerd.log ]; do
         sleep 1
     done
-    tail -f /home/dfs/logs/trackerd.log
+    tail -f /opt/fastdfs/logs/trackerd.log
 elif [ "${FASTDFS_MODE}" = "storage" ];
     then
     echo "start storage and nginx"
     # Start the storage and nginx
     /usr/local/bin/fdfs_storaged start && /usr/local/nginx/sbin/nginx
     # Wait for the log file to be generated
-    while [ ! -f /home/dfs/logs/storaged.log ]; do
+    while [ ! -f /opt/fastdfs/logs/storaged.log ]; do
         sleep 1
     done
-    tail -f /home/dfs/logs/storaged.log
+    tail -f /opt/fastdfs/logs/storaged.log
 else
     echo 'You need to choose the "FASTDFS_MODE"'
 fi
