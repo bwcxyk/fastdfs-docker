@@ -65,4 +65,4 @@ jobs:
           file: Dockerfile-alpine
           tags: |
             yaokun/fastdfs:V6.11-alpine
-            yaokun/fastdfs:latest-alpine
+            yaokun/fastdfs:alpine
