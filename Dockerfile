@@ -20,9 +20,9 @@ RUN set -x \
     && ls /opt \
     && cd /opt/tmp \
     # git clone libfastcommon, libserverframe, fastdfs, fastdfs-nginx-module
-    && git clone -b V1.0.71 https://github.com/happyfish100/libfastcommon.git --depth 1 \
-    && git clone -b V1.2.1 https://github.com/happyfish100/libserverframe.git --depth 1 \
-    && git clone -b V6.11.0 https://github.com/happyfish100/fastdfs.git --depth 1 \
+    && git clone -b V6.12.2 https://github.com/happyfish100/fastdfs.git --depth 1 \
+    && git clone -b V1.0.75 https://github.com/happyfish100/libfastcommon.git --depth 1 \
+    && git clone -b V1.2.5 https://github.com/happyfish100/libserverframe.git --depth 1 \
     && git clone -b V1.24 https://github.com/happyfish100/fastdfs-nginx-module.git --depth 1 \
     && wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
     && tar -zxvf nginx-$NGINX_VERSION.tar.gz \
