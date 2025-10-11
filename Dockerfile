@@ -1,7 +1,7 @@
 # debian
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
-ARG NGINX_VERSION=1.26.2
+ARG NGINX_VERSION=1.28.0
 
 ENV TZ "Asia/Shanghai"
 
@@ -45,6 +45,8 @@ RUN set -x \
     && rm -rf /opt/tmp
 
 VOLUME /opt/fastdfs
+WORKDIR /opt/fastdfs
+EXPOSE 22122 23000 80
 
 EXPOSE 22122 23000 80
 CMD ["fastdfs.sh"]
