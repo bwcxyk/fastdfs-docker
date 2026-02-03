@@ -48,5 +48,4 @@ VOLUME /opt/fastdfs
 WORKDIR /opt/fastdfs
 EXPOSE 22122 23000 80
 
-EXPOSE 22122 23000 80
 CMD ["fastdfs.sh"]
