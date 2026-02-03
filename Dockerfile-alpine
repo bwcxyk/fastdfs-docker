@@ -1,5 +1,5 @@
 # base
-FROM alpine:3.22
+FROM alpine:3.23
 
 ARG NGINX_VERSION=1.28.0
 
@@ -7,16 +7,19 @@ ENV TZ "Asia/Shanghai"
 
 # conf
 COPY conf/* /home/
-COPY fastdfs.sh /usr/local/bin/
+COPY --chmod=755 fastdfs.sh /usr/local/bin/
 
 # run
 # install packages
 RUN set -eux \
     # && sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories \
     && apk update \
+    && apk add --no-cache ca-certificates \
+    && update-ca-certificates \
     && apk add --no-cache --virtual .build-deps alpine-sdk build-base perl-dev openssl-dev pcre-dev zlib-dev git \
     # git clone libfastcommon / libserverframe / fastdfs / fastdfs-nginx-module
     && mkdir /opt/tmp /opt/fastdfs \
+    && ls /opt \
     && cd /opt/tmp \
     && git clone -b V6.12.2 https://github.com/happyfish100/fastdfs.git --depth 1 \
     && git clone -b V1.0.75 https://github.com/happyfish100/libfastcommon.git --depth 1 \
@@ -35,7 +38,7 @@ RUN set -eux \
     # cp script
     && cp /opt/tmp/fastdfs/init.d/fdfs_trackerd /usr/local/bin/fdfs_trackerd \
     && cp /opt/tmp/fastdfs/init.d/fdfs_storaged /usr/local/bin/fdfs_storaged \
-    && chmod +x /usr/local/bin/fastdfs.sh /usr/local/bin/fdfs_trackerd /usr/local/bin/fdfs_storaged \
+    && chmod +x /usr/local/bin/fdfs_trackerd /usr/local/bin/fdfs_storaged \
     # cleanup
     && apk del .build-deps \
     && apk add --no-cache pcre-dev bash curl tzdata \

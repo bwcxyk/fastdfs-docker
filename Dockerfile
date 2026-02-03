@@ -7,14 +7,15 @@ ENV TZ "Asia/Shanghai"
 
 # conf
 COPY conf/* /home/
-COPY fastdfs.sh /usr/local/bin/
+COPY --chmod=755 fastdfs.sh /usr/local/bin/
 
 # run
 # install packages
-RUN set -x \
+RUN set -eux \
     # && sed -i 's|deb.debian.org|mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list.d/debian.sources \
     && apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates build-essential libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev wget git \
+    && apt-get install -y --no-install-recommends ca-certificates build-essential libpcre2-8-0 libpcre2-dev zlib1g zlib1g-dev libssl-dev wget git \
+    && update-ca-certificates \
     # build fastdfs
     && mkdir /opt/tmp /opt/fastdfs \
     && ls /opt \
@@ -37,9 +38,9 @@ RUN set -x \
     # cp script
     && cp /opt/tmp/fastdfs/init.d/fdfs_trackerd /usr/local/bin/fdfs_trackerd \
     && cp /opt/tmp/fastdfs/init.d/fdfs_storaged /usr/local/bin/fdfs_storaged \
-    && chmod +x /usr/local/bin/fastdfs.sh /usr/local/bin/fdfs_trackerd /usr/local/bin/fdfs_storaged \
+    && chmod +x /usr/local/bin/fdfs_trackerd /usr/local/bin/fdfs_storaged \
     # cleanup
-    && apt-get purge -y build-essential libpcre3-dev zlib1g-dev libssl-dev \
+    && apt-get purge -y build-essential libpcre2-dev zlib1g-dev libssl-dev \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /opt/tmp
