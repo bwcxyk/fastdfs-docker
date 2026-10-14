@@ -2,6 +2,8 @@
 
 TRACKER_ADDR="${TRACKER_SERVER:-fdfs-tracker:22122}"
 RESERVED_STORAGE_SPACE="${RESERVED_STORAGE_SPACE:-10%}"
+ANTI_STEAL_CHECK_TOKEN="${ANTI_STEAL_CHECK_TOKEN:-false}"
+ANTI_STEAL_SECRET_KEY="${ANTI_STEAL_SECRET_KEY:-FastDFS1234567890}"
 
 # 复制配置文件
 cp /home/http.conf /etc/fdfs/http.conf
@@ -17,6 +19,10 @@ sed -i -e "s|###TRACKER###|${TRACKER_ADDR}|g" /etc/fdfs/client.conf
 sed -i -e "s|###TRACKER###|${TRACKER_ADDR}|g" /etc/fdfs/storage.conf
 sed -i -e "s|###TRACKER###|${TRACKER_ADDR}|g" /etc/fdfs/mod_fastdfs.conf
 sed -i -e "s|###RESERVED_STORAGE_SPACE###|${RESERVED_STORAGE_SPACE}|g" /etc/fdfs/tracker.conf
+
+# 替换防盗链配置（密钥请勿包含空格及 & | \ 等符号，会被 sed 特殊处理）
+sed -i -e "s|###ANTI_STEAL_CHECK_TOKEN###|${ANTI_STEAL_CHECK_TOKEN}|g" /etc/fdfs/http.conf
+sed -i -e "s|###ANTI_STEAL_SECRET_KEY###|${ANTI_STEAL_SECRET_KEY}|g" /etc/fdfs/http.conf
 
 # 启动服务
 case "${FASTDFS_MODE}" in

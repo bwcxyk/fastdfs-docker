@@ -24,7 +24,7 @@ Dockerfile 所需要的一些配置文件
 启动tracker
 
 ```bash
-docker run -d -e FASTDFS_MODE=tracker -e RESERVED_STORAGE_SPACE=10G -p 22122:22122--name tracker yaokun/fastdfs:V6.09
+docker run -d -e FASTDFS_MODE=tracker -e RESERVED_STORAGE_SPACE=10G -p 22122:22122 --name tracker yaokun/fastdfs:V6.09
 ```
 
 > `RESERVED_STORAGE_SPACE`可以是具体的GB、MB、KB、B
@@ -37,8 +37,33 @@ docker run -d -e FASTDFS_MODE=tracker -e RESERVED_STORAGE_SPACE=10G -p 22122:221
 > 兼容docker及k8s中服务名称的写法，比如`fdfs-tracker:22122`
 
 ```bash
-docker run -d -e FASTDFS_MODE=storage -e TRACKER_SERVER=192.168.1.2:22122 -p 80:80 -p 23000:23000 --name tracker yaokun/fastdfs:V6.09
+docker run -d -e FASTDFS_MODE=storage -e TRACKER_SERVER=192.168.1.2:22122 -p 80:80 -p 23000:23000 --name storage yaokun/fastdfs:V6.12.2
 ```
+
+## 环境变量
+
+以下变量均可在 `docker run -e` 或 compose 的 `environment` 中指定，未指定时使用默认值。
+
+|            变量            |                 默认值                 |      作用范围       | 说明                                                                            |
+| :------------------------: | :-------------------------------------: | :-----------------: | :------------------------------------------------------------------------------ |
+|       `FASTDFS_MODE`       |                   无                    | tracker / storage   | **必填**，启动模式                                                              |
+|      `TRACKER_SERVER`      |           `fdfs-tracker:22122`          |       storage       | 该 storage 连接的 tracker 地址，格式 `HOST:PORT`                                  |
+| `RESERVED_STORAGE_SPACE`   |                  `10%`                  |       tracker       | 预留空间，可写 `10G`/`500M`/`10%`                                               |
+|  `ANTI_STEAL_CHECK_TOKEN`  |                `false`                  |       storage       | 是否开启防盗链（token 校验）                                                    |
+|   `ANTI_STEAL_SECRET_KEY`  |         `FastDFS1234567890`             |       storage       | 防盗链密钥；开启防盗链后**必须修改**，不要使用特殊符号                         |
+
+> 注意：配置文件中的 `###XXX###` 为占位符，由启动脚本 `entrypoint.sh` 在容器启动时用上述环境变量替换，
+> 直接修改镜像内的 `/etc/fdfs/*.conf` 不会生效（每次启动都会被覆盖），请通过环境变量设置。
+
+### 开启防盗链
+
+```bash
+docker run -d -e FASTDFS_MODE=storage -e TRACKER_SERVER=192.168.1.2:22122 \
+  -e ANTI_STEAL_CHECK_TOKEN=true -e ANTI_STEAL_SECRET_KEY=your-secret-key \
+  -p 80:80 -p 23000:23000 --name storage yaokun/fastdfs:V6.12.2
+```
+
+开启后访问 URL 必须携带 token，即 `?ts=<时间戳>&token=<md5>`，由 FastDFS 客户端（如 `fastdfs-client-java`）用同一密钥生成，否则返回 404。
 
 
 ### 状态检查

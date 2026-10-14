@@ -1,13 +1,13 @@
 # base
 FROM alpine:3.23
 
-ARG NGINX_VERSION=1.28.0
+ARG NGINX_VERSION=1.30.5
 
 ENV TZ "Asia/Shanghai"
 
 # conf
 COPY conf/* /home/
-COPY --chmod=755 fastdfs.sh /usr/local/bin/
+COPY --chmod=755 entrypoint.sh /
 
 # run
 # install packages
@@ -48,4 +48,4 @@ VOLUME /opt/fastdfs
 WORKDIR /opt/fastdfs
 EXPOSE 22122 23000 80
 
-CMD ["fastdfs.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
